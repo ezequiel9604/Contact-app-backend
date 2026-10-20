@@ -1,0 +1,46 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Contact } from './interfaces/contact';
+import { contacts as dummyContacts } from './data/contacts';
+
+@Injectable()
+export class ContactService {
+  private contacts: Contact[] = [];
+  private nextId = 1;
+
+  constructor() {
+    this.contacts = dummyContacts.map((c) => ({
+      ...c,
+      coordinates: { ...c.coordinates },
+    }));
+    this.nextId = Math.max(0, ...this.contacts.map((c) => c.id)) + 1;
+  }
+
+  findAll(): Contact[] {
+    return this.contacts;
+  }
+
+  findOne(id: number): Contact {
+    const contact = this.contacts.find((c) => c.id === id);
+    if (!contact) {
+      throw new NotFoundException(`Contact with id ${id} not found`);
+    }
+    return contact;
+  }
+
+  create(data: Omit<Contact, 'id'>): Contact {
+    const contact: Contact = { id: this.nextId++, ...data };
+    this.contacts.push(contact);
+    return contact;
+  }
+
+  update(id: number, data: Partial<Omit<Contact, 'id'>>): Contact {
+    const contact = this.findOne(id);
+    Object.assign(contact, data);
+    return contact;
+  }
+
+  remove(id: number): void {
+    const contact = this.findOne(id);
+    this.contacts = this.contacts.filter((c) => c.id !== contact.id);
+  }
+}
