@@ -101,4 +101,14 @@ export const contacts: Contact[] = [
     coordinates: { latitude: 33.763382, longitude: -84.395175 },
     isDeleted: false,
   },
+  {
+    id: 11,
+    initials: 'MR',
+    name: 'Mark Royer',
+    phoneNumber: '+1 (404) 555-0111',
+    email: 'olivia.brown@example.com',
+    address: '265 Park Ave W NW, Atlanta, GA 30313',
+    coordinates: { latitude: 33.763382, longitude: -84.395175 },
+    isDeleted: false,
+  },
 ];
