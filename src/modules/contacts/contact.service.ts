@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Contact } from './interfaces/contact';
 import { contacts as dummyContacts } from './data/contacts';
+import { normalizeString as nomarmalizeString } from '../../common/utils';
 
 @Injectable()
 export class ContactService {
@@ -24,12 +25,11 @@ export class ContactService {
       return this.contacts;
     }
 
-    const name = filters.name?.toLowerCase();
+    const name = nomarmalizeString(filters.name || '');
 
     return this.contacts.filter((contact) => {
-      const matchesName = name
-        ? contact.name.toLowerCase().includes(name)
-        : true;
+      const contactName = nomarmalizeString(contact.name);
+      const matchesName = name ? contactName.includes(name) : true;
       return matchesName;
     });
   }
