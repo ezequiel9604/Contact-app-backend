@@ -19,6 +19,21 @@ export class ContactService {
     return this.contacts;
   }
 
+  searchBy(filters: Partial<Omit<Contact, 'id'>>): Contact[] {
+    if (Object.keys(filters).length === 0) {
+      return this.contacts;
+    }
+
+    const name = filters.name?.toLowerCase();
+
+    return this.contacts.filter((contact) => {
+      const matchesName = name
+        ? contact.name.toLowerCase().includes(name)
+        : true;
+      return matchesName;
+    });
+  }
+
   findOne(id: number): Contact {
     const contact = this.contacts.find((c) => c.id === id);
     if (!contact) {

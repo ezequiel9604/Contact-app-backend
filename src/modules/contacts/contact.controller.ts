@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import type { Contact } from './interfaces/contact';
@@ -19,6 +20,11 @@ export class ContactController {
   @Get()
   findAll(): Contact[] {
     return this.contactService.findAll();
+  }
+
+  @Get('search')
+  searchBy(@Query() search: Partial<Omit<Contact, 'id'>>): Contact[] {
+    return this.contactService.searchBy(search);
   }
 
   @Get(':id')
